@@ -23,8 +23,10 @@ router = APIRouter()
 async def get_report(
         session: AsyncSession = Depends(get_async_session),
         wrapper_services: Aiogoogle = Depends(get_service)
-
-):
+        # не совсем понял как тут сделать, если dict[list[CharityProject], str]
+        # то он return подчеркивает, а если GoogleResponse, то зачем?
+        # у нас же есть response_model
+) -> GoogleResponse:
     """Только для суперюзеров."""
     charity_projects = await (
         charity_project_crud.get_projects_by_completion_rate(session)
@@ -34,7 +36,6 @@ async def get_report(
     await spreadsheets_update_value(spreadsheetid,
                                     charity_projects,
                                     wrapper_services)
-    # очень хотелось увидеть ссылку в ответе
     return GoogleResponse(
         charity_projects=charity_projects,
         link=LINK + spreadsheetid

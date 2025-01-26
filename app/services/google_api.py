@@ -25,7 +25,6 @@ async def spreadsheets_create(wrapper_services: Aiogoogle) -> str:
         service.spreadsheets.create(json=spreadsheet_body)
     )
     spreadsheetid = response['spreadsheetId']
-    #print('https://docs.google.com/spreadsheets/d/' + spreadsheetid)
     return spreadsheetid
 
 
@@ -72,7 +71,6 @@ async def spreadsheets_update_value(
     await wrapper_services.as_service_account(
         service.spreadsheets.values.update(
             spreadsheetId=spreadsheetid,
-            # не знаю как по другому это сделать, нужен совет
             range=f'A1:C{len(table_values)+len(charity_projects)}',
             valueInputOption='USER_ENTERED',
             json=update_body
